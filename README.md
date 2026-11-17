@@ -61,14 +61,17 @@ from slack_bot_template import sign_request, verify_signature
 client = FakeClient()
 router = Router()
 
+
 @router.command("/deploy")
 def deploy(event: SlackEvent) -> dict[str, Any]:
     client.post_message(event.channel or "C0", f"Deploying {event.text}...")
     return {"response_type": "ephemeral", "text": f"Deploy queued: {event.text}"}
 
+
 @router.event(EventKind.APP_MENTION)
 def greet(event: SlackEvent) -> dict[str, Any]:
     return {"text": f"Hi <@{event.user}>!"}
+
 
 # Verify the inbound request before trusting it:
 signature = sign_request("signing-secret", "1700000000", body="...")
